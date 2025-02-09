@@ -13,6 +13,13 @@ services:
       - "./api:/api"
     ports:
       - "8000:5000"
-    # attachable: true
     command:
-      - "sleep infinity"
+      - /bin/bash
+
+    develop:
+      watch:
+        - action: sync
+          path: "./api"
+          target: "/api"
+          ignore:
+            - .venv/

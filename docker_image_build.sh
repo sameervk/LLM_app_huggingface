@@ -9,9 +9,6 @@ export LATEST_COMMIT
 # Print the latest commit hash
 echo "The latest commit hash is: $LATEST_COMMIT"
 
-# Tag the Docker image
-docker tag llmapp-api:latest sameervk/llmapp-api:$LATEST_COMMIT
-# docker tag image:tag repository:tag
+# Build the Docker image
+docker compose -f compose.yaml build api
 
-# Push the Docker image to Docker Hub
-docker push sameervk/llmapp-api:$LATEST_COMMIT
