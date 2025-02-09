@@ -1,0 +1,20 @@
+{
+  "name": "LLM_app_huggingface-api",
+  "service": "api",
+  "dockerComposeFile": "../../compose.yaml",
+  "workspaceFolder": "/api",
+  "features": {},
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-toolsai.jupyter",
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "workbench.settings.editor": "json"
+      }
+    }
+  }
+}
