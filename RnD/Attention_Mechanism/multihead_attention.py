@@ -1,5 +1,5 @@
 import torch
-from masked_attention import MaskedAttention
+from RnD.Attention_Mechanism.masked_attention import MaskedAttention
 
 class MultiHeadAttentionWrapper(torch.nn.Module):
 
