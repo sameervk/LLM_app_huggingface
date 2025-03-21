@@ -51,20 +51,17 @@ class TransformerBlockGPT2(torch.nn.Module):
 if __name__=="__main__":
     import  json
 
-    path_to_cfg = "GPT2_arch_config.json"
-    with open(file=path_to_cfg, mode="r") as file:
+    with open("GPT2_arch_config.json", mode="r") as file:
         cfg = json.loads(file.read())
     print(cfg)
-
-    llm_cfg = cfg['GPT_CONFIG_124M']
 
     # test input
     batch_size = 3
     num_tokens = 5
-    test_input = torch.rand(size=(batch_size, num_tokens, llm_cfg['embed_dim']))
+    test_input = torch.rand(size=(batch_size, num_tokens, cfg['embed_dim']))
 
     # transformer layer
-    test_transformer_layer = TransformerBlockGPT2(**llm_cfg)
+    test_transformer_layer = TransformerBlockGPT2(**cfg)
 
     test_output = test_transformer_layer(test_input)
 

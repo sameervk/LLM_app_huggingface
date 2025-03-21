@@ -65,14 +65,12 @@ if __name__=="__main__":
     with open("GPT2_arch_config.json", "r") as file:
         cfg = json.loads(file.read())
 
-    gpt2_cfg = cfg["GPT_CONFIG_124M"]
-
     batch_size = 2
     num_tokens = 4
-    test_input_tokens = torch.randint(0, gpt2_cfg["vocab_size"], size=(batch_size, num_tokens))
+    test_input_tokens = torch.randint(0, cfg["vocab_size"], size=(batch_size, num_tokens))
     print(f"Input shape: {test_input_tokens.shape}")
 
-    gpt_model = GPT2(**gpt2_cfg)
+    gpt_model = GPT2(**cfg)
 
     output = gpt_model(test_input_tokens)
     print(f"Output shape: f{output.shape}")

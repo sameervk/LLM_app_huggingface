@@ -2,11 +2,13 @@ import torch
 from typing import Dict
 from RnD.LLM_arch.GPT2.llm_gpt2 import GPT2
 
-def generate_text(model: torch.nn.Module,
-                  input_tokens: torch.Tensor,
-                  context_length: int,
-                  max_new_tokens: int
-                  ):
+
+def generate_text(
+    model: torch.nn.Module,
+    input_tokens: torch.Tensor,
+    context_length: int,
+    max_new_tokens: int,
+):
     """
 
     :param model: LLM model
@@ -18,7 +20,6 @@ def generate_text(model: torch.nn.Module,
     """
 
     for _ in range(max_new_tokens):
-
         # cut the input size to context length
         input_tokens_cut = input_tokens[:, -context_length:]
 
@@ -44,3 +45,35 @@ def generate_text(model: torch.nn.Module,
     return input_tokens
 
 
+if __name__ == "__main__":
+    from tokenizers import Tokenizer
+
+    tokenizer = Tokenizer.from_pretrained("gpt2")
+
+    test_txt = "Gudiya is "
+
+    tokenized_text = tokenizer.encode(test_txt)
+    tokenized_text_ids = torch.tensor(tokenized_text.ids).unsqueeze(dim=0)
+    # reshaping to [batch_size, num_tokens]
+
+    ##--------------##
+    # GPT model
+    import json
+
+    with open("GPT2_arch_config.json", "r") as file:
+        cfg = json.loads(file.read())
+
+    gpt_model = GPT2(**cfg)
+    gpt_model.eval()
+    # Set to evaluation mode - required so that the dropout layers are disabled
+
+    generated_text_token_ids = generate_text(
+        model=gpt_model,
+        input_tokens=tokenized_text_ids,
+        context_length=cfg["context_length"],
+        max_new_tokens=10,
+    )
+    print(f"Number of output tokens: {generated_text_token_ids.size()}")
+    # convert ids to text
+    decoded_text = tokenizer.decode(ids=generated_text_token_ids.squeeze(0).tolist())
+    print(f"Decoded text: {decoded_text}")
