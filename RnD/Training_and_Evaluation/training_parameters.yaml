@@ -1,0 +1,6 @@
+dataset:
+    stride : 256  # ensure stride <= context length
+    train_val_split_ratio: 0.9
+    batch_size: 2
+    epochs: 10
+
