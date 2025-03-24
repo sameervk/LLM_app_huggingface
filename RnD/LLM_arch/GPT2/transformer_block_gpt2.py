@@ -49,10 +49,10 @@ class TransformerBlockGPT2(torch.nn.Module):
 
 
 if __name__=="__main__":
-    import  json
+    import  yaml
 
-    with open("GPT2_arch_config.json", mode="r") as file:
-        cfg = json.loads(file.read())
+    with open("GPT2_arch_config.yaml", mode="r") as file:
+        cfg = yaml.safe_load(file.read())
     print(cfg)
 
     # test input

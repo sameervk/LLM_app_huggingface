@@ -49,7 +49,7 @@ class GPT2(torch.nn.Module):
 
 if __name__=="__main__":
 
-    import json
+    import yaml
 
     # from tokenizers import Tokenizer
     #
@@ -62,8 +62,8 @@ if __name__=="__main__":
     # test_tokens = gpt_tokenizer.encode_batch(test_text)
     # print(test_tokens)
 
-    with open("GPT2_arch_config.json", "r") as file:
-        cfg = json.loads(file.read())
+    with open("GPT2_arch_config.yaml", "r") as file:
+        cfg = yaml.safe_load(file.read())
 
     batch_size = 2
     num_tokens = 4

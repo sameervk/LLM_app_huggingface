@@ -1,9 +1,8 @@
 import torch
-from typing import Dict
 from RnD.LLM_arch.GPT2.llm_gpt2 import GPT2
 
 
-def generate_text(
+def generate_tokens(
     model: torch.nn.Module,
     input_tokens: torch.Tensor,
     context_length: int,
@@ -58,16 +57,16 @@ if __name__ == "__main__":
 
     ##--------------##
     # GPT model
-    import json
+    import yaml
 
-    with open("GPT2_arch_config.json", "r") as file:
-        cfg = json.loads(file.read())
+    with open("GPT2_arch_config.yaml", "r") as file:
+        cfg = yaml.safe_load(file.read())
 
     gpt_model = GPT2(**cfg)
     gpt_model.eval()
     # Set to evaluation mode - required so that the dropout layers are disabled
 
-    generated_text_token_ids = generate_text(
+    generated_text_token_ids = generate_tokens(
         model=gpt_model,
         input_tokens=tokenized_text_ids,
         context_length=cfg["context_length"],
