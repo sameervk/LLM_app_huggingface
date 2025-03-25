@@ -1,30 +1,28 @@
 import yaml
-from pathlib import Path
 from tokenizers import Tokenizer
 import torch
 import mlflow
 
 from RnD.Tokenisation_Embedding.dataloader import GPTDatasetV1, create_dataloader_v1
 from RnD.LLM_arch.GPT2.llm_gpt2 import GPT2
-from RnD.Training_and_Evaluation.utils import calculate_loss
-from RnD.LLM_arch.GPT2.generate_text import generate_text
-
-
-# import data
-def import_data(path: str):
-    if Path(path).exists():
-        with open(path, "r", encoding="utf-8") as f:
-            txt = f.read()
-            return txt
-    else:
-        raise FileNotFoundError(path)
-
+from RnD.Training_and_Evaluation.utils import (
+    import_data,
+    generate_text,
+    evaluate_model,
+    calculate_loss_per_batch,
+)
 
 
 if __name__=="__main__":
 
     import time
     start_time = time.time()
+
+    # identify training hardware: cpu or gpu
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    # for reproducibility
+    torch.manual_seed(100)
 
     # import tokenizer
     tokenizer_model = "gpt2"
@@ -49,9 +47,6 @@ if __name__=="__main__":
     train_data_length = int(train_validation_split_ratio*len(training_data))
     val_data = training_data[train_data_length:]
     training_data = training_data[: train_data_length]
-
-    # for reproducibility
-    torch.manual_seed(100)
 
     # create Pytorch Datasets
     train_dataset = GPTDatasetV1(txt=training_data,
@@ -90,40 +85,78 @@ if __name__=="__main__":
 
     # initiate model
     model = GPT2(**llm_config)
-
-    # identify training hardware: cpu or gpu
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Training will be executed on {device}")
     model.to(device=device)
 
     # loss before training
-    with torch.no_grad():
-        train_loss = calculate_loss(model=model,
-                                  dataloader=train_dataloader,
-                                  num_batches=len(train_dataloader),
-                                  compute_device=device
-                                  )
-        print(f"Train data loss before training: {train_loss:.4f}")
+    train_loss = evaluate_model(model=model,
+                                          val_dataloader=train_dataloader,
+                                          compute_device=device
+                                          )
+    val_loss = evaluate_model(
+        model=model,
+        val_dataloader=val_dataloader,
+        compute_device=device,
+    )
+    print(f"\nTrain data loss before training: {train_loss:.4f}")
+    print(f"Validation data loss before training: {val_loss:.4f}")
 
-        val_loss = calculate_loss(model=model,
-                                  dataloader=val_dataloader,
-                                  num_batches=len(val_dataloader),
-                                  compute_device=device
-                                  )
-        print(f"Validation data loss before training: {val_loss:.4f}")
+    # Evaluation using a prompt
+    test_prompt = "What is "
+    generated_text = generate_text(model=model,
+                                   prompt=test_prompt,
+                                   num_output_tokens=20,
+                                   tokenizer=tokenizer,
+                                   context_len=llm_config["context_length"],
+                                   compute_device=device
+                                   )
+    print(f"\nGenerated text: {generated_text}")
 
-    # code for evaluation
-    model.eval()
-    test_text = "What is "
-    test_text_ids = torch.tensor(tokenizer.encode(test_text).ids).unsqueeze(0).to(device)
-    with torch.no_grad():
-        generated_tokens = generate_text(model=model,
-                                         input_tokens=test_text_ids,
-                                         context_length=llm_config["context_length"],
-                                         max_new_tokens=20
-                                         )
-    generated_text = tokenizer.decode(generated_tokens.squeeze(0).tolist())
-    print(f"{generated_text}")
+    # optimizer
+    optimizer = torch.optim.AdamW(params=model.parameters(),
+                                  lr=train_params["optimizer"]["learning_rate"],
+                                  weight_decay=train_params["optimizer"]["weight_decay"]
+                                  )
+
+    epochs = train_params["epochs"]
+
+    # frequency at which model evaluation is carried out during training
+    eval_freq = 5
+    model.train()
+    loss_at_epoch = []
+    for epoch in range(epochs):
+
+        epoch_loss = 0
+
+        for batch_num, (input_batch, target_batch) in enumerate(train_dataloader, 1):
+
+            # reset the gradients to zero
+            optimizer.zero_grad()
+
+            # calculate loss per batch
+            loss = calculate_loss_per_batch(x_batch=input_batch,
+                                            y_batch=target_batch,
+                                            model=model,
+                                            compute_device=device
+                                            )
+            epoch_loss += loss.item()
+
+            # calculate the gradients and propagate the loss backwards
+            loss.backward()
+
+            # update the weights
+            optimizer.step()
+
+            # show validation and
+            if batch_num % eval_freq == 0:
+                eval_loss = evaluate_model(model=model,
+                                           val_dataloader=val_dataloader,
+                                           compute_device=device
+                                           )
+                print(f"Validation data loss at epoch {epoch}: {eval_loss:.3f}")
+
+        loss_at_epoch.append(epoch_loss/batch_num)
+        print(f"\nTraining loss at epoch {epochs}: {epoch_loss/batch_num:.3f}")
 
 
     end_time = time.time()
