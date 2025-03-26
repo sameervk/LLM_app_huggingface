@@ -1,7 +1,7 @@
 vocab_size: 50257
 context_length: 256
-embed_dim: 768
-num_attention_heads: 12
+embed_dim: 512
+num_attention_heads: 8
 num_layers: 12
 drop_rate: 0.1
 qkv_bias: false
