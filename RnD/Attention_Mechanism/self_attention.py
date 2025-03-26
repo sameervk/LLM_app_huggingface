@@ -1,5 +1,6 @@
 import torch
 
+
 class SelfAttentionV1(torch.nn.Module):
     """
     uses Parameter class to initialise the Q, K and V weight matrices
@@ -19,13 +20,15 @@ class SelfAttentionV1(torch.nn.Module):
         :return: z context vector; shape: context_length x dim_out
         """
 
-        keys = x_inputs @ self.W_key # shape: context_length x dim_out
-        queries = x_inputs @ self.W_query # shape: context_length x dim_out
-        values =  x_inputs @ self.W_value # shape: context_length x dim_out
+        keys = x_inputs @ self.W_key  # shape: context_length x dim_out
+        queries = x_inputs @ self.W_query  # shape: context_length x dim_out
+        values = x_inputs @ self.W_value  # shape: context_length x dim_out
 
-        attention_scores = queries @ keys.T # shape: context_length x context_length
+        attention_scores = queries @ keys.T  # shape: context_length x context_length
 
-        attention_weights = torch.softmax(attention_scores/keys.shape[-1]**0.5, dim=-1)
+        attention_weights = torch.softmax(
+            attention_scores / keys.shape[-1] ** 0.5, dim=-1
+        )
         # shape: context_length x context_length
 
         context_vec = attention_weights @ values
@@ -54,13 +57,15 @@ class SelfAttentionV2(torch.nn.Module):
         :return: z context vector; shape: context_length x dim_out
         """
 
-        keys = self.W_key(x_inputs) # shape: context_length x dim_out
-        queries = self.W_query(x_inputs) # shape: context_length x dim_out
-        values = self.W_value(x_inputs) # shape: context_length x dim_out
+        keys = self.W_key(x_inputs)  # shape: context_length x dim_out
+        queries = self.W_query(x_inputs)  # shape: context_length x dim_out
+        values = self.W_value(x_inputs)  # shape: context_length x dim_out
 
-        attention_scores = queries @ keys.T # shape: context_length x context_length
+        attention_scores = queries @ keys.T  # shape: context_length x context_length
 
-        attention_weights = torch.softmax(attention_scores/keys.shape[-1]**0.5, dim=-1)
+        attention_weights = torch.softmax(
+            attention_scores / keys.shape[-1] ** 0.5, dim=-1
+        )
         # shape: context_length x context_length
 
         context_vec = attention_weights @ values
@@ -69,15 +74,16 @@ class SelfAttentionV2(torch.nn.Module):
         return context_vec
 
 
-if __name__=="__main__":
-
+if __name__ == "__main__":
     torch.manual_seed(123)
 
     # context_length x embedding_dim
     embedding_dim = 4
     test_inputs = torch.rand(size=(8, embedding_dim))
 
-    self_attention_layer = SelfAttentionV2(dim_in=embedding_dim, dim_out=3, qkv_bias=False)
+    self_attention_layer = SelfAttentionV2(
+        dim_in=embedding_dim, dim_out=3, qkv_bias=False
+    )
 
     test_output = self_attention_layer(test_inputs)
 

@@ -4,33 +4,30 @@ from RnD.LLM_arch.GPT2.transformer_block_gpt2 import TransformerBlockGPT2
 
 
 class GPT2(torch.nn.Module):
-
     def __init__(self, **cfg):
-
         super().__init__()
 
         self.num_transform_blocks = cfg["num_layers"]
 
-        self.token_embd_layer = torch.nn.Embedding(num_embeddings=cfg["vocab_size"],
-                                                   embedding_dim=cfg["embed_dim"]
-                                                   )
-        self.pos_embd_layer = torch.nn.Embedding(num_embeddings=cfg["context_length"],
-                                                 embedding_dim=cfg["embed_dim"]
-                                                 )
+        self.token_embd_layer = torch.nn.Embedding(
+            num_embeddings=cfg["vocab_size"], embedding_dim=cfg["embed_dim"]
+        )
+        self.pos_embd_layer = torch.nn.Embedding(
+            num_embeddings=cfg["context_length"], embedding_dim=cfg["embed_dim"]
+        )
         self.dropout_layer = torch.nn.Dropout(p=cfg["drop_rate"])
 
-        self.transformer_blocks = torch.nn.Sequential(*[TransformerBlockGPT2(**cfg)
-                                                        for _ in range(self.num_transform_blocks)])
+        self.transformer_blocks = torch.nn.Sequential(
+            *[TransformerBlockGPT2(**cfg) for _ in range(self.num_transform_blocks)]
+        )
 
         self.layer_norm = torch.nn.LayerNorm(normalized_shape=cfg["embed_dim"])
 
-        self.final_linear_layer = torch.nn.Linear(in_features=cfg["embed_dim"],
-                                                  out_features=cfg["vocab_size"],
-                                                  bias=False
-                                                  )
+        self.final_linear_layer = torch.nn.Linear(
+            in_features=cfg["embed_dim"], out_features=cfg["vocab_size"], bias=False
+        )
 
     def forward(self, X_tokens):
-
         batch_size, input_token_size = X_tokens.shape
 
         token_embeds = self.token_embd_layer(X_tokens)
@@ -47,8 +44,7 @@ class GPT2(torch.nn.Module):
         return logits
 
 
-if __name__=="__main__":
-
+if __name__ == "__main__":
     import yaml
 
     # from tokenizers import Tokenizer
@@ -67,7 +63,9 @@ if __name__=="__main__":
 
     batch_size = 2
     num_tokens = 4
-    test_input_tokens = torch.randint(0, cfg["vocab_size"], size=(batch_size, num_tokens))
+    test_input_tokens = torch.randint(
+        0, cfg["vocab_size"], size=(batch_size, num_tokens)
+    )
     print(f"Input shape: {test_input_tokens.shape}")
 
     gpt_model = GPT2(**cfg)
@@ -86,9 +84,9 @@ if __name__=="__main__":
     num_params_feedforward = 0
     num_params_attention = 0
     for name, param in gpt_model.named_parameters():
-        if 'feedforward' in name:
+        if "feedforward" in name:
             num_params_feedforward += param.numel()
-        elif 'multihead' in name:
+        elif "multihead" in name:
             num_params_attention += param.numel()
     print(f"Number of parameters in feed forward layers: {num_params_feedforward}")
     print(f"Number of parameters in attention layers: {num_params_attention}")
@@ -99,4 +97,4 @@ if __name__=="__main__":
 
     total_size_bytes = total_parameters * 4
     # assuming float32
-    print(f"Total memory size: {total_size_bytes/(1024 * 1024):.2f} MB")
+    print(f"Total memory size: {total_size_bytes / (1024 * 1024):.2f} MB")
