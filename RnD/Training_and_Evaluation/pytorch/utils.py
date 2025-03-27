@@ -62,6 +62,28 @@ def evaluate_model(
     return val_loss
 
 
+def calculate_perplexity(model:torch.nn.Module, dataloader: DataLoader, compute_device:torch.device, perpl_func) -> float :
+
+    avg_perplexity = 0
+    num_batches = len(dataloader)
+    assert num_batches>=1, "Dataloader must contain at least 1 batch"
+
+    model.eval()
+    for input_batch, target_batch in dataloader:
+
+        input_batch = input_batch.to(compute_device)
+        target_batch = target_batch.to(compute_device)
+
+        preds = model(input_batch)
+
+        perplexity_value = perpl_func(preds, target_batch)
+        avg_perplexity+=perplexity_value
+
+    model.train()
+
+    return avg_perplexity/num_batches
+
+
 def generate_text(
     model: torch.nn.Module,
     prompt: str,
