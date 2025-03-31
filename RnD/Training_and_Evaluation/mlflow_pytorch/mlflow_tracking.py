@@ -38,17 +38,24 @@ uri_host = os.getenv("HOST")+":"+os.getenv("PORT")
 print(f"Tracking server: {uri_host}")
 
 # set tracking uri
-mlflow.set_tracking_uri(uri=uri_host)
+# mlflow.set_tracking_uri(uri=uri_host)
+client = mlflow.MlflowClient(tracking_uri=uri_host)
 
 # set experiment
-experiment = mlflow.set_experiment(experiment_name="GPT2-smalldataset-pytorch")
-
-# add any tags to the experiment
 experiment_tags = {
     "description": "Training of GPT2 architecture-based LLM using Pytorch",
-    "data": "The Verdict from https://en.wikisource.org/wiki/The_Verdict"
+    "data": "The Verdict from https://en.wikisource.org/wiki/The_Verdict",
+    "mlflow.note.content": "Training of GPT2 architecture-based LLM using Pytorch"
 }
-mlflow.set_experiment_tags(tags=experiment_tags)
+# experiment = mlflow.set_experiment(experiment_name="GPT2-smalldataset-pytorch")
+# add any tags to the experiment
+# mlflow.set_experiment_tags(tags=experiment_tags)
+try:
+    experiment = client.create_experiment(name="GPT2-smalldataset-pytorch",
+                                          tags=experiment_tags)
+except mlflow.exceptions.RestException:
+
+    experiment = client.get_experiment_by_name(name="GPT2-smalldataset-pytorch")
 
 # ------------------------- #
 # Initiate LLM
@@ -197,4 +204,7 @@ with mlflow.start_run(run_name=experiment_run_name):
                              registered_model_name="custom_gpt2_model",
                              signature=signature
                              )
+    mlflow.pyfunc.log_model()
+
+    # TODO: save model in pkl format
 
