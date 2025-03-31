@@ -9,23 +9,12 @@ dependencies = [
     "ipython>=8.32.0",
     "ipywidgets>=8.1.5",
     "matplotlib>=3.10.0",
-    "mlflow>=2.20.2",
     "numpy>=2.2.2",
     "pandas>=2.2.3",
     "pydantic>=2.10.6",
     "pytest>=8.3.4",
     "seaborn>=0.13.2",
-    "tokenizers>=0.21.0",
     "tqdm>=4.67.1",
-    "torch",
-    "transformers>=4.50.1",
-    "torchmetrics>=1.7.0",
-    "torchinfo>=1.8.0",
-]
-
-[tool.uv.sources]
-torch = [
-    {index="pytorch-cu118"}
 ]
 
 [[tool.uv.index]]
