@@ -1,0 +1,1 @@
+- Run the mlflow server from the terminal in the root repository.
