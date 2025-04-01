@@ -46,6 +46,7 @@ def generate_tokens(
 
     return input_tokens
 
+
 def generate_text(
     model: torch.nn.Module,
     prompt: str,
@@ -79,11 +80,11 @@ def generate_text(
 
     return generated_text
 
-if __name__=="__main__":
 
+if __name__ == "__main__":
     # set tracking uri
     # mlflow.set_tracking_uri(uri="http://localhost/8080")
-    model_uri = "mlartifacts/0/f899d06791074c7c9d5a9303c93deaad/artifacts/models"
+    model_uri = "mlartifacts/368316252121826279/da7c4cfce91a46fdb25d2249466aa753/artifacts/models"
     # model_uri = "models:/custom_gpt2_model@production"
 
     loaded_model = mlflow.pytorch.load_model(model_uri)

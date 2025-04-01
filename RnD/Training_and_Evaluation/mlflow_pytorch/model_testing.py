@@ -8,7 +8,7 @@ from tokenizers import Tokenizer
 
 from RnD.Training_and_Evaluation.pytorch.utils import generate_text
 
-if __name__=="__main__":
+if __name__ == "__main__":
     dotenv.load_dotenv("RnD/Training_and_Evaluation/mlflow_pytorch/mlflow_config.env")
 
     uri_host = os.getenv("HOST") + ":" + os.getenv("PORT")
@@ -20,7 +20,6 @@ if __name__=="__main__":
     model_uri = "models:/custom_gpt2_model@production"
 
     loaded_model = mlflow.pytorch.load_model(model_uri)
-
 
     test_prompt = "What is "
     tokenizer = Tokenizer.from_pretrained("gpt2")
