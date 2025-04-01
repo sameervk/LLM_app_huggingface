@@ -10,12 +10,13 @@ WORKDIR /RnD
 
 COPY uv.lock uv.lock
 COPY pyproject.toml pyproject.toml
-COPY model.py model.py
-COPY __init__.py __init__.py
 
 RUN uv venv && uv sync
 
 ENV PATH="/RnD/.venv/bin:$PATH"
+
+COPY model.py model.py
+COPY __init__.py __init__.py
 
 ENTRYPOINT ["/bin/bash"]
 
