@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import mlflow
 
 
-env_var = dotenv.load_dotenv("app.env")
+env_var = dotenv.load_dotenv("app_config.env")
 
 if env_var:
     pass
@@ -29,9 +29,10 @@ app.add_middleware(
 
 # download model
 # mlflow.set_tracking_uri("http://localhost:8080")
-model_uri = "mlartifacts/368316252121826279/da7c4cfce91a46fdb25d2249466aa753/artifacts/models"
+# model_uri = "../mlartifacts/368316252121826279/70d9c885e3e84885b91585640a06084f/artifacts/models"
+model_uri = os.getenv("MODEL_URI")
 
-model=mlflow.pytorch.load_model(model_uri)
+model=mlflow.pytorch.load_model(model_uri, map_location="cpu")
 print(model)
 
 @app.get(path="/", status_code=status.HTTP_200_OK)
@@ -43,7 +44,7 @@ async def home():
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app="api.main:app",
+    uvicorn.run(app="main:app",
                 host="localhost",
                 port=5000,
                 reload=True,
