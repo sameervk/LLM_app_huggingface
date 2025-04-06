@@ -1,5 +1,5 @@
 [project]
-name = "rnd"
+name = "RnD"
 version = "0.1.0"
 description = "LLM model research and development"
 readme = "README.md"
@@ -26,5 +26,7 @@ explicit = true
 
 [dependency-groups]
 dev = [
+    "build>=1.2.2.post1",
+    "hatchling>=1.27.0",
     "ipython>=9.0.2",
 ]
