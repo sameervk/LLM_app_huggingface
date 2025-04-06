@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# secrets
+/api/access_tokens.env
+
 # mlflow
 mlruns
 mlartifacts
@@ -13,7 +16,7 @@ mlartifacts
 .Python
 build/
 develop-eggs/
-dist/
+
 downloads/
 eggs/
 .eggs/
