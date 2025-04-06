@@ -22,5 +22,6 @@
    * The container was built using `docker run --rm -it --mount type=bind,source=/home/sameervk/Documents/Training/MachineLearning/LLM_app_huggingface/mlartifacts,target=/RnD/mlartifacts --name test_container2 llm_model_image:latest /bin/bash`
      * Unlike the earlier attempt, there was no need to mount `RnD` folder.
    * For more details, see https://mlflow.org/docs/latest/model/dependencies/#saving-extra-code-with-an-mlflow-model
-7. However, it is important 
+7. Instead of mounting, this code can be packaged (as `.whl` or `.tar.gz`) and installed.
+   * This method has been used for the `api` directory.
 
