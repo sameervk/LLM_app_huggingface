@@ -6,7 +6,7 @@ dataset:
 tokenizer_model: "gpt2"
 
 optimizer:
-    learning_rate: 0.0004
+    learning_rate: 0.0001
     weight_decay: 0.1
 
 epochs: 1

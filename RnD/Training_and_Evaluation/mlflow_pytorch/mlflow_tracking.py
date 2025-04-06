@@ -19,7 +19,7 @@ from RnD.Training_and_Evaluation.pytorch.utils import (
     calculate_perplexity,
 )
 
-
+# Ensure the working directory is set to the repo directory.
 print(f"Working directory: {Path.cwd()}")
 
 # ------------------------- #
@@ -228,13 +228,9 @@ with mlflow.start_run(
         registered_model_name="custom_gpt2_model",
         signature=signature,
         pip_requirements=[
-            "mlflow-skinny==2.21.2",
-            "torch==2.6.0+cu118",
-            "torchinfo==1.8.0",
-            "torchmetrics==1.7.0",
-            "transformers==4.50.3",
+            "code/llmarch-0.0.1-py3-none-any.whl"
         ],
-        code_paths=["RnD/LLM_arch", "RnD/Attention_Mechanism"],
+        code_paths=["dist/llmarch-0.0.1-py3-none-any.whl"],
         # required when saving in eager mode.
         # Another option is to convert the model into torch.jit.trace
     )
