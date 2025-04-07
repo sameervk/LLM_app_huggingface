@@ -43,7 +43,7 @@ FastAPI app using LLMs deployed on HuggingFace Spaces
 #### `watch` mode
 * The config is in `compose_api_watch.yaml`.
 * This is to quickly test the application execution in a docker container given any changes to the code.
-* Run `docker compose -f compose_api_watch.yaml up api --watch`
+* Run `docker compose -f DEV_compose_api_watch.yaml up api --watch`
   * Need the `--watch` option, else it is not enabled.
 * It a directory is to be `watched`, do not specify it as a `volume` too. Else, `volume` takes precedence.
 
@@ -52,7 +52,7 @@ FastAPI app using LLMs deployed on HuggingFace Spaces
 * The command that needs to be set in the compose file to start the container is `sleep infinity`.
 * Interestingly, when `api` folder is specified as volume, for some reason, the `RnD .whl` package is **_missing_** even after installation during image build.
   * _Not sure what is happening here._
-* Run `docker compose -f compose_api_volume.yaml up -d api` to build and start the container.
+* Run `docker compose -f DEV_compose_api_volume.yaml up -d api` to build and start the container.
 
 ### Production
 * Use the similar config as `Development: volume`
