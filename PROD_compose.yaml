@@ -1,0 +1,21 @@
+name: LLMApp
+
+services:
+  api:
+    container_name: LLM_app_huggingface-api
+    build:
+      context: "./api"
+      dockerfile: "Dockerfile_prod"
+      secrets:
+        - llm_arch
+      tags:
+        - llmapp-api:${VERSION}
+      labels:
+        - git.commit=${LATEST_COMMIT}
+    volumes:
+      - "./mlartifacts:/api/mlartifacts"
+
+secrets:
+  llm_arch:
+    environment: LLM_DOWNLOAD_ACCESS_TOKEN
+

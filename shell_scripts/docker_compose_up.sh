@@ -11,10 +11,10 @@ echo "The latest commit hash is: $LATEST_COMMIT"
 
 source $PWD/../api/access_tokens.env
 
-export VERSION=v1.1
+export VERSION=PROD_v1.1
 
 # Build the Docker image and start the container
-docker compose -f ../compose_api_volume.yaml up -d api
+docker compose -f ../PROD_compose.yaml up api
 
 # for recreating if change in config
 #docker compose -f compose_api_volume.yaml up -d api --force-recreate
