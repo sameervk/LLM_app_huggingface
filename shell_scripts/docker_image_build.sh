@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# shell script to build an image using compose
+
 # Extract the latest commit hash
 LATEST_COMMIT=$(git rev-parse --short=7 HEAD)
 
@@ -9,9 +11,10 @@ export LATEST_COMMIT
 # Print the latest commit hash
 echo "The latest commit hash is: $LATEST_COMMIT"
 
-# Tag the Docker image
-docker tag llmapp-api:latest sameervk/llmapp-api:$LATEST_COMMIT
-# docker tag image:tag repository:tag
+source $PWD/../api/access_tokens.env
 
-# Push the Docker image to Docker Hub
-docker push sameervk/llmapp-api:$LATEST_COMMIT
+export VERSION=v1.1
+
+# Build the Docker image
+docker compose -f compose.yaml build api
+
