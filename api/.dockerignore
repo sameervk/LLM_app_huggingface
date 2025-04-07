@@ -3,3 +3,6 @@
 access_tokens.env
 .ipynb_checkpoints
 Dockerfile_v0
+Dockerfile_v1
+Dockerfile_prod
+Dockerfile_v1-1
