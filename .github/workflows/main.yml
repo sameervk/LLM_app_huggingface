@@ -31,4 +31,5 @@ jobs:
     
             - name: Run tests
               run: |
+                  cd $PWD/api
                   make all
