@@ -1,0 +1,34 @@
+name: CI
+
+run-name: CI
+
+on:
+    push:
+        branches:
+        - main
+
+#   pull_request:
+#     branches:
+#       - main
+
+jobs:
+    Build-and-Test:
+        runs-on: ubuntu24.04LTS
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+    
+            - name: Set up Python
+              uses: actions/setup-python@v2
+              with:
+                  python-version: '3.12'
+    
+            - name: Install dependencies
+              run: |
+                  curl -LsSf https://astral.sh/uv/0.5.25/install.sh | sh
+                  cd $PWD/api
+                  uv sync --frozen --no-cache
+    
+            - name: Run tests
+              run: |
+                  make all
