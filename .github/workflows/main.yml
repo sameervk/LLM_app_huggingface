@@ -28,7 +28,7 @@ jobs:
                   curl -LsSf https://astral.sh/uv/0.5.25/install.sh | sh
                   cd $PWD/api
                   uv sync --frozen --no-cache
-                  # uv add  https://{{secrets.LLM_ARCH_PACKAGE}}@raw.githubusercontent.com/sameervk/LLM_app_huggingface/main/dist/llmarch-0.0.1-py3-none-any.whl
+                  # uv add  https://@raw.githubusercontent.com/sameervk/LLM_app_huggingface/main/dist/llmarch-0.0.1-py3-none-any.whl
                   uv add  https://{{secrets.LLM_ARCH_PACKAGE}}@raw.githubusercontent.com/sameervk/LLM_app_huggingface/main/dist/llmarch-0.0.1-py3-none-any.whl
 
     
