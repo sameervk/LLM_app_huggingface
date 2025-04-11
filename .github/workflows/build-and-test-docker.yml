@@ -24,6 +24,7 @@ jobs:
 
             - name: make tests
               run: |
+                  curl -LsSf https://astral.sh/uv/0.5.25/install.sh | sh
                   echo "Linting and formatting"
                   cd api
                   make all
