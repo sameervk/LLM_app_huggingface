@@ -1,6 +1,6 @@
 
-install:
-	uv sync --frozen --no-cache
+# install:
+# 	uv sync --frozen --no-cache
 
 lint:
 	uvx ruff check --exclude *.ipynb
