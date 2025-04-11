@@ -25,7 +25,7 @@ jobs:
       container:        
         image: ghcr.io/sameervk/llm_app_huggingface:873b43b79f62f9a7dc6f53eae77fe35b67a4781a
         volumes:
-          - .mlartifacts:/api/mlartifacts
+          - ./mlartifacts:/api/mlartifacts
         
         # Add any other necessary volumes here
     
