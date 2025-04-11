@@ -38,9 +38,9 @@ jobs:
                   context: ./api
                   file: ./api/Dockerfile_prod
                   push: true
-                  tags: ghcr.io/${{ env.REPO_NAME}}:${{github.sha}} 
+                  tags: ${{ env.REPO_NAME }}:${{ github.sha }} 
                   secrets: |                    
-                    "llm_arch=${{ secrets.GITHUB_TOKEN }}"
+                    "llm_arch=${{ secrets.LLM_DOWNLOAD_ACCESS_TOKEN }}"
                   
                    
     
