@@ -1,8 +1,10 @@
 import mlflow
 from torch import Size
-from torchinfo import summary
+
+# from torchinfo import summary
 import os
 import dotenv
+
 env_var = dotenv.load_dotenv("app_config.env")
 if env_var:
     pass
@@ -23,8 +25,10 @@ input_layer_size = model.token_embd_layer.weight.shape
 # print(type(model_summary))
 # # print(model)
 
+
 def test_num_parameters():
     assert total_parameters == 35265536
+
 
 def test_input_embd_shape():
     assert input_layer_size == Size([50257, 256])
