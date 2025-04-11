@@ -1,0 +1,38 @@
+name: CI
+
+run-name: CI
+
+on:
+    push:
+        branches:
+        - main
+
+#   pull_request:
+#     branches:
+#       - main
+
+jobs:
+    Build-and-Test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+    
+            - name: Set up Python
+              uses: actions/setup-python@v2
+              with:
+                  python-version: '3.12'
+    
+            - name: Install dependencies
+              run: |
+                  curl -LsSf https://astral.sh/uv/0.5.25/install.sh | sh
+                  cd $PWD/api
+                  uv sync --frozen --no-cache
+                  uv add  https://@raw.githubusercontent.com/sameervk/LLM_app_huggingface/main/dist/llmarch-0.0.1-py3-none-any.whl
+                  # uv add  https://{{secrets.LLM_ARCH_PACKAGE}}@raw.githubusercontent.com/sameervk/LLM_app_huggingface/main/dist/llmarch-0.0.1-py3-none-any.whl
+
+    
+            - name: Run tests
+              run: |
+                  cd $PWD/api
+                  make all
