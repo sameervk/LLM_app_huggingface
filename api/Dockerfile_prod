@@ -17,7 +17,7 @@ RUN uv sync --frozen --no-cache
 
 
 # install RnD code
-RUN --mount=type=secret,id=llm_arch,env=GITHUB_TOKEN\
+RUN --mount=type=secret,id=llm_arch\
     uv add https://{llm_arch}@raw.githubusercontent.com/sameervk/LLM_app_huggingface/main/dist/llmarch-0.0.1-py3-none-any.whl
 
 # add this to the sys path
