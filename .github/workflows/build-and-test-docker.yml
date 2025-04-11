@@ -1,0 +1,43 @@
+name: CI-Docker
+
+run-name: Build and Test docker image and container
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+    Build-and-Test:
+      runs-on: ubuntu-latest
+      environment: production
+      defaults:
+          run:
+              shell: bash
+           
+      steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Set up Docker Login
+              uses: docker/login-action@v2
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}             
+    
+            - name: Build and push docker image
+              uses: docker/build-push-action@471d1dc4e07e5cdedd4c2171150001c434f0b7a4
+              with:
+                  context: ./api
+                  file: Dockerfile_prod
+                  push: true
+                  tags: ghcr.io/${{ github.repository}}:${{github.sha}} 
+                  env: |
+                    VERSION: ${{ github.event.inputs.version }}
+                    LLM_DOWNLOAD_ACCESS_TOKEN: ${{ secrets.LLM_DOWNLOAD_ACCESS_TOKEN }}
+                  
+                   
+    
