@@ -3,7 +3,7 @@ name: CI-Docker
 run-name: Build and Test docker image and container
 
 on:
-  push:
+  pull_request_target:
     branches:
       - main
 
@@ -16,11 +16,17 @@ jobs:
       permissions:
         contents: read
         packages: write
-        
+
           
       steps:
             - name: Checkout code
               uses: actions/checkout@v2
+
+            - name: make tests
+              run: |
+                  echo "Linting and formatting"
+                  cd api
+                  make all
 
             - name: Set up Docker Login
               uses: docker/login-action@v2
@@ -42,9 +48,10 @@ jobs:
                   context: ./api
                   file: ./api/Dockerfile_prod
                   push: true
-                  tags: ghcr.io/${{ env.REPO }}:${{ github.sha }} 
+                  tags: |
+                    ghcr.io/${{ env.REPO }}:${{ github.sha }} 
+                    ghcr.io/${{ env.REPO }}:latest
                   secrets: |                    
                     "llm_arch=${{ secrets.LLM_DOWNLOAD_ACCESS_TOKEN }}"
                   
-                   
     
