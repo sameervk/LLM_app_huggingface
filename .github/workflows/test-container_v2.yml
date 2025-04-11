@@ -38,7 +38,7 @@ jobs:
             echo "Testing docker container"
             docker run --rm \
               -v ${{ github.workspace }}/mlartifacts:/api/mlartifacts \
-              ghcr.io/sameervk/llm_app_huggingface:873b43b79f62f9a7dc6f53eae77fe35b67a4781a \
+              ghcr.io/sameervk/llm_app_huggingface:latest \
               /bin/bash -c "cd /api && make test"
         
         # Add any other necessary volumes here
