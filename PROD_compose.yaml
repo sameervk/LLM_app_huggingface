@@ -8,8 +8,6 @@ services:
       dockerfile: "Dockerfile_prod"
       secrets:
         - llm_arch
-      tags:
-        - llmapp-api:${VERSION}
       labels:
         - git.commit=${LATEST_COMMIT}
     volumes:
