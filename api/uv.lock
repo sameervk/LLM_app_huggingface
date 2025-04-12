@@ -50,6 +50,7 @@ dependencies = [
     { name = "fastapi", extra = ["standard"] },
     { name = "ipython" },
     { name = "ipywidgets" },
+    { name = "llmarch" },
     { name = "matplotlib" },
     { name = "mlflow" },
     { name = "numpy" },
@@ -58,6 +59,7 @@ dependencies = [
     { name = "pytest" },
     { name = "seaborn" },
     { name = "torch" },
+    { name = "torchinfo" },
     { name = "tqdm" },
     { name = "transformers" },
 ]
@@ -74,6 +76,7 @@ requires-dist = [
     { name = "fastapi", extras = ["standard"], specifier = ">=0.115.8" },
     { name = "ipython", specifier = ">=8.32.0" },
     { name = "ipywidgets", specifier = ">=8.1.5" },
+    { name = "llmarch", url = "https://raw.githubusercontent.com/sameervk/LLM_app_huggingface/main/dist/llmarch-0.0.1-py3-none-any.whl" },
     { name = "matplotlib", specifier = ">=3.10.0" },
     { name = "mlflow", specifier = "==2.21.2" },
     { name = "numpy", specifier = ">=2.2.2" },
@@ -82,6 +85,7 @@ requires-dist = [
     { name = "pytest", specifier = ">=8.3.4" },
     { name = "seaborn", specifier = ">=0.13.2" },
     { name = "torch", specifier = ">=2.6.0", index = "https://download.pytorch.org/whl/cu118" },
+    { name = "torchinfo", specifier = ">=1.8.0" },
     { name = "tqdm", specifier = ">=4.67.1" },
     { name = "transformers", specifier = "==4.50.3" },
 ]
@@ -1236,6 +1240,14 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/05/f9/27e94c1b3eb29e6933b6986ffc5fa1177d2cd1f0c8efc5f02c91c9ac61de/kiwisolver-1.4.8-cp313-cp313t-musllinux_1_2_ppc64le.whl", hash = "sha256:151dffc4865e5fe6dafce5480fab84f950d14566c480c08a53c663a0020504b6", size = 2390661 },
     { url = "https://files.pythonhosted.org/packages/d9/d4/3c9735faa36ac591a4afcc2980d2691000506050b7a7e80bcfe44048daa7/kiwisolver-1.4.8-cp313-cp313t-musllinux_1_2_s390x.whl", hash = "sha256:577facaa411c10421314598b50413aa1ebcf5126f704f1e5d72d7e4e9f020d90", size = 2546710 },
     { url = "https://files.pythonhosted.org/packages/4c/fa/be89a49c640930180657482a74970cdcf6f7072c8d2471e1babe17a222dc/kiwisolver-1.4.8-cp313-cp313t-musllinux_1_2_x86_64.whl", hash = "sha256:be4816dc51c8a471749d664161b434912eee82f2ea66bd7628bd14583a833e85", size = 2349213 },
+]
+
+[[package]]
+name = "llmarch"
+version = "0.0.1"
+source = { url = "https://raw.githubusercontent.com/sameervk/LLM_app_huggingface/main/dist/llmarch-0.0.1-py3-none-any.whl" }
+wheels = [
+    { url = "https://raw.githubusercontent.com/sameervk/LLM_app_huggingface/main/dist/llmarch-0.0.1-py3-none-any.whl", hash = "sha256:37460adff941897b0d1cf99028f414f3fdaf4da65b8fbf3f65a3b431bc8ee167" },
 ]
 
 [[package]]
@@ -2738,6 +2750,15 @@ wheels = [
     { url = "https://download.pytorch.org/whl/cu118/torch-2.6.0%2Bcu118-cp313-cp313-linux_x86_64.whl", hash = "sha256:8d30eb2870ffe05d81ec513bdb08c0f2bab9fd1bd4fbc6e5681fad855c7b99e3" },
     { url = "https://download.pytorch.org/whl/cu118/torch-2.6.0%2Bcu118-cp313-cp313-win_amd64.whl", hash = "sha256:a6bfe22660fb902b5ade933b04c81be7ddc268d1a9f28f843f20c0dee5216edd" },
     { url = "https://download.pytorch.org/whl/cu118/torch-2.6.0%2Bcu118-cp313-cp313t-linux_x86_64.whl", hash = "sha256:771643a2801e199f5a6f7d07803b5604e82ba44d2db1106ad6cc33788326b8ec" },
+]
+
+[[package]]
+name = "torchinfo"
+version = "1.8.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/53/d9/2b811d1c0812e9ef23e6cf2dbe022becbe6c5ab065e33fd80ee05c0cd996/torchinfo-1.8.0.tar.gz", hash = "sha256:72e94b0e9a3e64dc583a8e5b7940b8938a1ac0f033f795457f27e6f4e7afa2e9", size = 25880 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/72/25/973bd6128381951b23cdcd8a9870c6dcfc5606cb864df8eabd82e529f9c1/torchinfo-1.8.0-py3-none-any.whl", hash = "sha256:2e911c2918603f945c26ff21a3a838d12709223dc4ccf243407bce8b6e897b46", size = 23377 },
 ]
 
 [[package]]
