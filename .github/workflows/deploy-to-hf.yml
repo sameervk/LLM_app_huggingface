@@ -1,0 +1,30 @@
+name: Deploy-To-HF
+
+run-name: Build and test Gradio app and dependencies and deploy to HuggingFace Spaces
+
+
+on:
+  pull_request_target:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  Build-and-Test:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Push to HF hub
+        env:
+          HF_TOKEN: ${{secrets.PUSH_TO_HF_ACCESS_TOKEN}}
+        run: git push https://skesava:$HF_TOKEN@huggingface.co/spaces/skesava/GPT2_Arch_TestApp main
+
+
+
+
+
