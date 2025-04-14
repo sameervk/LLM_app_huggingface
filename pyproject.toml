@@ -1,9 +1,33 @@
 [project]
 name = "llmarch"
 version = "0.0.1"
-#authors = ["Sameer Kesava"]
+description = "Gradio app for the LLM"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "gradio>=5.25.0",
+    "pytest>=8.3.4",
+    "torch>=2.6.0",
+    "tqdm>=4.67.1",
+    "transformers==4.50.3",
+]
 
 
+[tool.uv.sources]
+torch = [
+    {index="pytorch-cpu-only"}
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu-only"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[dependency-groups]
+dev = [
+    "ipython>=8.32.0",
+    "ruff>=0.9.6",
+]
 
 [build-system]
 requires = ["setuptools==78.1.0"]
