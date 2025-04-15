@@ -14,6 +14,11 @@ jobs:
   Build-and-Test:
     runs-on: ubuntu-latest
     environment: production
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./GPT2_Arch_TestApp
+    
 
     steps:
       - name: Checkout specific files
@@ -27,10 +32,4 @@ jobs:
         env:
           HF_TOKEN: ${{secrets.HF_ACCESS_TOKEN}}
         run: |
-          cd GPT2_Arch_TestApp
           git push https://skesava:$HF_TOKEN@huggingface.co/spaces/skesava/GPT2_Arch_TestApp main
-
-
-
-
-
