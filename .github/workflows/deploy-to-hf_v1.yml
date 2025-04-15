@@ -1,4 +1,4 @@
-name: Deploy-To-HF
+name: Push-Model-To-HF-Space
 
 run-name: Build and test Gradio app and dependencies and deploy to HuggingFace Spaces
 
