@@ -21,7 +21,7 @@ jobs:
     
 
     steps:
-      - name: Checkout specific files
+      - name: Checkout repo
         uses: actions/checkout@v4
         # with:
         #   sparse-checkout: |
@@ -33,8 +33,3 @@ jobs:
           HF_TOKEN: ${{secrets.HF_ACCESS_TOKEN}}
         run: |
           git push https://skesava:$HF_TOKEN@huggingface.co/spaces/skesava/GPT2_Arch_TestApp main
-
-
-
-
-
