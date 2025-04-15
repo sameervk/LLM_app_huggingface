@@ -21,11 +21,11 @@ jobs:
     
 
     steps:
-      - name: Checkout specific files
+      - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            GPT2_Arch_TestApp
+        # with:
+        #   sparse-checkout: |
+        #     GPT2_Arch_TestApp
           
 
       - name: Push to HF hub
