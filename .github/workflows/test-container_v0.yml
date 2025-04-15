@@ -3,7 +3,7 @@ name: CI-Docker-UsingContainerService
 run-name: Test docker container
 
 on:
-  push:
+  pull_request_target:
     branches:
       - main
 
