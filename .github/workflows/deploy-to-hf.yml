@@ -26,7 +26,9 @@ jobs:
       - name: Push to HF hub
         env:
           HF_TOKEN: ${{secrets.HF_ACCESS_TOKEN}}
-        run: git push https://skesava:$HF_TOKEN@huggingface.co/spaces/skesava/GPT2_Arch_TestApp GPT2_Arch_TestApp
+        run: |
+          cd GPT2_Arch_TestApp
+          git push https://skesava:$HF_TOKEN@huggingface.co/spaces/skesava/GPT2_Arch_TestApp main
 
 
 
