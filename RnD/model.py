@@ -1,5 +1,4 @@
 import mlflow
-import os
 
 import torch.cuda
 from tokenizers import Tokenizer

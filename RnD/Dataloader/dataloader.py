@@ -1,5 +1,4 @@
 from urllib.error import HTTPError
-from pathlib import Path
 import torch
 from torch.utils.data import DataLoader, Dataset
 from tokenizers import Tokenizer
