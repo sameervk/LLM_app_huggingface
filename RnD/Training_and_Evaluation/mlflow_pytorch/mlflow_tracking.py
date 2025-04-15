@@ -227,9 +227,7 @@ with mlflow.start_run(
         artifact_path="models",
         registered_model_name="custom_gpt2_model",
         signature=signature,
-        pip_requirements=[
-            "code/llmarch-0.0.1-py3-none-any.whl"
-        ],
+        pip_requirements=["code/llmarch-0.0.1-py3-none-any.whl"],
         code_paths=["dist/llmarch-0.0.1-py3-none-any.whl"],
         # required when saving in eager mode.
         # Another option is to convert the model into torch.jit.trace
