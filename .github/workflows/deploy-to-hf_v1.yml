@@ -26,24 +26,22 @@ jobs:
         with:
           sparse-checkout: |
             RnD
-          
+                
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
-    
-            - name: Set up Python
-              uses: actions/setup-python@v2
-              with:
-                  python-version: '3.12'
-    
-            - name: Install dependencies              
-              run: |
-                  curl -LsSf https://astral.sh/uv/0.5.25/install.sh | sh
-                  uv sync --frozen --no-cache
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+            python-version: '3.12'
 
-            - name: Push model to HF Hub
-              run: |
-                  uv run hf_hub_push_model.py
+      - name: Install dependencies              
+        run: |
+            curl -LsSf https://astral.sh/uv/0.5.25/install.sh | sh
+            uv sync --frozen --no-cache
+
+      - name: Push model to HF Hub
+        run: |
+            uv run hf_hub_push_model.py
 # requires mlflow tracking server to execute this.
               
