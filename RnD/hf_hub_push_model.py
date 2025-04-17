@@ -1,5 +1,5 @@
 import torch
-from huggingface_hub import PyTorchModelHubMixin
+from huggingface_hub import PyTorchModelHubMixin, HfApi
 import dotenv
 import os
 import yaml
@@ -32,6 +32,7 @@ class GPT2HF(
 
 if __name__ == "__main__":
     username = os.getenv("HF_SPACE_USERNAME")
+    hf_space_name = os.getenv("HF_SPACE_REPONAME")
     mlflow_model_uri = os.getenv("MLFLOW_MODEL_URI")
     mlflow_tracking_uri = os.getenv("MLFLOW_TRACKING_URI")
 
@@ -68,6 +69,7 @@ if __name__ == "__main__":
     # with torch.serialization.safe_globals([GPT2]):
     # model_to_hf_hub.load_state_dict(torch.load(str(path_to_weights), weights_only=True))
 
+    # ------------------------------
     # ------PUSH TO HF HUB---------
     model_to_hf_hub.push_to_hub(
         username + "/" + model_version.name,
@@ -75,6 +77,7 @@ if __name__ == "__main__":
         token=os.getenv("GITHUB_ACTION_ACCESS_TOKEN"),
     )
 
+    # --------------------------------------------
     # -------Test download model: WORKS-----------
     from tokenizers import Tokenizer
 
@@ -109,3 +112,14 @@ if __name__ == "__main__":
     print(
         f"\nGenerated text before training given prompt '{test_prompt}' : {generated_text}"
     )
+
+    # -----------------------------------
+    # ---------RESTART HF SPACE----------
+    hf_api = HfApi()
+    try:
+        space_run_time_info = hf_api.restart_space(
+            repo_id=username + "/" + hf_space_name,
+            token=os.getenv("GITHUB_ACTION_ACCESS_TOKEN"),
+        )
+    except Exception as err:
+        print(err)
