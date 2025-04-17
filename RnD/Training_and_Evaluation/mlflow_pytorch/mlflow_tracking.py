@@ -47,7 +47,7 @@ if experiment is None:
     # set experiment
     experiment_tags = {
         "mlflow.note.content": "Training of GPT2 architecture-based LLM using Pytorch. "
-                               "Data: The Verdict from https://en.wikisource.org/wiki/The_Verdict"
+        "Data: The Verdict from https://en.wikisource.org/wiki/The_Verdict"
     }
     experiment = mlflow.set_experiment(experiment_name="GPT2-smalldataset-pytorch")
     # # add any tags to the experiment
@@ -164,7 +164,7 @@ with mlflow.start_run(
 
     epochs = train_params["epochs"]
 
-    for epoch in range(1, epochs+1):
+    for epoch in range(1, epochs + 1):
         loss = 0
         for batch_num, (input_batch, target_batch) in enumerate(train_dataloader, 1):
             input_batch = input_batch.to(compute_device)
