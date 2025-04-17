@@ -41,16 +41,17 @@ print(f"Tracking server: {uri_host}")
 mlflow.set_tracking_uri(uri=uri_host)
 # client = mlflow.MlflowClient(tracking_uri=uri_host)
 
-# set experiment
-experiment_tags = {
-    "description": "Training of GPT2 architecture-based LLM using Pytorch",
-    "data": "The Verdict from https://en.wikisource.org/wiki/The_Verdict",
-    "mlflow.note.content": "Training of GPT2 architecture-based LLM using Pytorch",
-}
-experiment = mlflow.set_experiment(experiment_name="GPT2-smalldataset-pytorch")
-# # add any tags to the experiment
-mlflow.set_experiment_tags(tags=experiment_tags)
-
+# Set experiment
+experiment = mlflow.get_experiment_by_name(name="GPT2-smalldataset-pytorch")
+if experiment is None:
+    # set experiment
+    experiment_tags = {
+        "mlflow.note.content": "Training of GPT2 architecture-based LLM using Pytorch. "
+                               "Data: The Verdict from https://en.wikisource.org/wiki/The_Verdict"
+    }
+    experiment = mlflow.set_experiment(experiment_name="GPT2-smalldataset-pytorch")
+    # # add any tags to the experiment
+    mlflow.set_experiment_tags(tags=experiment_tags)
 # try:
 #     experiment = client.create_experiment(name="GPT2-smalldataset-pytorch",
 #                                           tags=experiment_tags)
@@ -157,13 +158,13 @@ with mlflow.start_run(
     mlflow.log_params(params=params_to_log)
 
     # log model summary
-    with open("model_summary.txt", "w") as f:
+    with open(Path.cwd().joinpath("model_summary.txt"), "w") as f:
         f.write(str(summary(model=model)))
-    mlflow.log_artifact("model_summary.txt")
+    mlflow.log_artifact(str(Path.cwd().joinpath("model_summary.txt")))
 
     epochs = train_params["epochs"]
 
-    for epoch in range(epochs):
+    for epoch in range(1, epochs+1):
         loss = 0
         for batch_num, (input_batch, target_batch) in enumerate(train_dataloader, 1):
             input_batch = input_batch.to(compute_device)
