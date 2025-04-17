@@ -1,7 +1,8 @@
 [project]
 name = "api"
 version = "0.1.0"
-description = "Add your description here"
+description = "FastAPI backend server for model inferencing"
+authors = [{name = "Sameer Kesava"}]
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

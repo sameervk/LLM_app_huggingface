@@ -2,6 +2,7 @@
 name = "RnD"
 version = "0.1.0"
 description = "LLM model research and development"
+authors = [{name = "Sameer Kesava"}]
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
