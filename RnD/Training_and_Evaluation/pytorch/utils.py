@@ -39,7 +39,7 @@ def calculate_loss_per_batch(x_batch, y_batch, model, compute_device) -> torch.T
     # shape: [batch_size, num_tokens]
 
     logits = model(x_batch)
-    # shape:[batch_size, context_length/num_tokens, embed_dim]
+    # shape:[batch_size, context_length/num_tokens, vocab_size]
 
     loss_per_batch = cross_entropy(
         input=logits.flatten(0, 1), target=y_batch.flatten(0)

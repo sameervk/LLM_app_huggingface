@@ -6,7 +6,7 @@ import yaml
 import mlflow
 
 from RnD.LLM_arch.GPT2.llm_gpt2 import GPT2
-from RnD.model import generate_text
+from RnD.Training_and_Evaluation.pytorch.utils import generate_text
 
 env_var = dotenv.load_dotenv(".env")
 if os.getenv("GITHUB_ACTION_ACCESS_TOKEN"):
