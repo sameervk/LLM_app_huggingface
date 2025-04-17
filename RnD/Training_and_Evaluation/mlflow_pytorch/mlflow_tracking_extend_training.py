@@ -27,12 +27,16 @@ print(f"Working directory: {Path.cwd()}")
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    "--experiment_run_id", help="The runid of the model for which training needs to be extended", required=True
+    "--experiment_run_id",
+    help="The runid of the model for which training needs to be extended",
+    required=True,
 )
 parser.add_argument(
     "--run_description", help="A short description of the run", required=False
 )
-parser.add_argument("--start_epoch", help="start epoch number of the extended training", required=True)
+parser.add_argument(
+    "--start_epoch", help="start epoch number of the extended training", required=True
+)
 # parser.add_argument("--end_epoch", help="end epoch number of the extended training", required=True)
 args = parser.parse_args()
 
@@ -62,19 +66,20 @@ try:
     # if end_epoch - start_epoch <= 0:
     #     raise ValueError("End epoch number must be greater than start epoch number")
 
-    if 'end_epoch' in last_run.data.params:
-        last_epoch_number = int(last_run.data.params['end_epoch'])
+    if "end_epoch" in last_run.data.params:
+        last_epoch_number = int(last_run.data.params["end_epoch"])
     else:
-        last_epoch_number = int(last_run.data.params['epochs'])
+        last_epoch_number = int(last_run.data.params["epochs"])
 
     if start_epoch != last_epoch_number + 1:
-        raise ValueError("Start epoch number must be equal to the last epoch number + 1")
+        raise ValueError(
+            "Start epoch number must be equal to the last epoch number + 1"
+        )
 
 except Exception as err:
     raise err
 
 # Parse run description
-# TODO
 run_description = args.run_description
 
 # Download model
@@ -86,9 +91,11 @@ model.to(compute_device)
 model.train()
 
 # Download config
-config_file_path = mlflow.artifacts.download_artifacts(f"runs:/{experiment_run_id}/llm_config.yaml")
-with open(config_file_path, 'r') as file:
-    llm_config =  yaml.safe_load(file.read())
+config_file_path = mlflow.artifacts.download_artifacts(
+    f"runs:/{experiment_run_id}/llm_config.yaml"
+)
+with open(config_file_path, "r") as file:
+    llm_config = yaml.safe_load(file.read())
 
 
 # ------------------------- #
@@ -97,12 +104,14 @@ with open("RnD/Training_and_Evaluation/training_parameters.yaml", "r") as file:
     train_params = yaml.safe_load(file.read())
 
     # add start and end epochs
-    train_params['start_epoch'] = start_epoch
-    end_epoch = start_epoch + train_params['epochs']
-    train_params['end_epoch'] = end_epoch
+    train_params["start_epoch"] = start_epoch
+    end_epoch = start_epoch + train_params["epochs"]
+    train_params["end_epoch"] = end_epoch
 
     # update run description
-    run_description = run_description + f" Start epoch: {start_epoch}, End epoch: {end_epoch}"
+    run_description = (
+        run_description + f" Start epoch: {start_epoch}, End epoch: {end_epoch}"
+    )
 
 
 # ------------------------- #
@@ -173,8 +182,10 @@ optimizer = torch.optim.AdamW(
 metrics_func = Perplexity().to(device=compute_device)
 
 with mlflow.start_run(
-    experiment_id=experiment.experiment_id, description= run_description,
-    nested=True, parent_run_id=experiment_run_id
+    experiment_id=experiment.experiment_id,
+    description=run_description,
+    nested=True,
+    parent_run_id=experiment_run_id,
 ):
     # log the LLM config
     mlflow.log_artifact(config_file_path)
