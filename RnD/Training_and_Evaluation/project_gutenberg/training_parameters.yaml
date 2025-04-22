@@ -1,0 +1,12 @@
+dataset:
+    stride : 256  # ensure stride <= context length
+    train_val_split_ratio: 0.9
+    batch_size: 2
+
+tokenizer_model: "gpt2"
+
+optimizer:
+    learning_rate: 0.0004
+    weight_decay: 0.1
+
+epochs: 10
