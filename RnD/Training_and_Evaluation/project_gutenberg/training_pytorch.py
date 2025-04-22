@@ -284,3 +284,7 @@ if __name__ == "__main__":
         model_version=model_version,
         model_save_dir=model_ver_save_dir,
     )
+
+# TODO
+# 1. Need to check how to save optimizer state too along with model state
+# 2. Need to check how to save artifacts such as llm and training config without using mlflow
