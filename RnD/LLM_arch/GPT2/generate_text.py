@@ -17,6 +17,7 @@ def generate_tokens(
     :return:
         [batch_size, max_new_tokens]
     """
+    assert model.pos_embd_layer.weight.shape[0] == context_length, "Incorrect context length, please check the embedding size of the positional layer for confirmation"
 
     for _ in range(max_new_tokens):
         # cut the input size to context length
