@@ -20,7 +20,7 @@ from RnD.Training_and_Evaluation.pytorch.utils import (
     evaluate_model,
     generate_text,
 )
-from .utils import print_eta
+from RnD.Training_and_Evaluation.project_gutenberg.utils import print_eta
 
 
 def read_text_tile(file_path):
@@ -71,29 +71,33 @@ def create_dataloaders(
 
 
 def train_model_basic(
-    model,
-    optimizer,
-    device,
+    model: torch.nn.Module,
+    optimizer: torch.optim.Optimizer,
+    device: torch.device,
     num_epochs: int,
-    tokenizer,
+    tokenizer: Tokenizer,
+    llm_config: dict,
+    train_params: dict,
+    path_to_files: list,
+    sample_prompt: str,
+    model_version: str,
+    model_save_dir: Path,
+    debug=False,
     text_separator: str = "<|endoftext|>",
-    llm_config: dict = {},
-    train_params: dict = {},
-    debug: bool = False,
-    path_to_files: list = [],
-    sample_prompt: str = "",
-    model_version: str = "v0",
-    model_save_dir: Path = Path("."),
 ):
     total_files = len(path_to_files)
     train_loss_per_epoch, val_loss_per_epoch, track_tokens_seen = [], [], []
     tokens_seen = 0
-    global_step = -1
+    global_step = -1  # for saving checkpoints primarily
     start_time = time.time()
     epoch = 0
 
+    model.to(device)
     try:
         for epoch in range(1, num_epochs + 1):
+            print("\n\n-----------------------------")
+            print(f"Training epoch: {epoch}")
+
             train_loss_per_batch = []
             val_loss_per_file = []
 
@@ -114,7 +118,6 @@ def train_model_basic(
                     num_workers=0,
                 )
                 print("\nTraining...")
-                model.to(device)
                 model.train()
 
                 for batch_num, (input_batch, target_batch) in enumerate(
@@ -138,6 +141,7 @@ def train_model_basic(
                     # update the weights
                     optimizer.step()
 
+                    # count the number of tokens seen in the batch
                     tokens_seen += input_batch.numel()
 
                     # update the global step num
@@ -161,19 +165,29 @@ def train_model_basic(
                     total_files=total_files,
                 )
 
-            print(f"At the end of epoch: {epoch}")
+            print(f"\n\nAt the end of epoch: {epoch}")
 
             # save model
-            file_name = f"model_proj_gut_{model_version}_{epoch}_{global_step}.pth"
-            torch.save(model.state_dict(), model_save_dir.joinpath(file_name))
+            file_name = (
+                f"model_optim_v{model_version}_step-{global_step}_epoch-{epoch}.pth"
+            )
+            torch.save(
+                {
+                    "model_state_dict": model.state_dict(),
+                    "optim_state_dict": optimizer.state_dict(),
+                },
+                model_save_dir.joinpath(file_name),
+            )
             print(f"Model {file_name} saved in {model_save_dir}")
 
             train_loss_per_epoch.append(
                 sum(train_loss_per_batch) / len(train_loss_per_batch)
             )
             print(f"Training loss: {train_loss_per_epoch[epoch - 1]:.3f}")
+
             val_loss_per_epoch.append(sum(val_loss_per_file) / total_files)
             print(f"Validation loss: {val_loss_per_epoch[epoch - 1]:.3f}")
+
             track_tokens_seen.append(tokens_seen)  # this is cumulative per epoch
             print(f"Tokens seen: {tokens_seen}\n")
 
@@ -190,12 +204,16 @@ def train_model_basic(
                 f"\nGenerated text after epoch {epoch} given prompt '{sample_prompt}' : {sample_generated_text}"
             )
 
-            print("-------------\n\n")
-
     except (Exception, KeyboardInterrupt) as err:
         print(err)
-        file_name = f"model_proj_gut_{model_version}_{epoch}_{global_step}.pth"
-        torch.save(model.state_dict(), model_save_dir.joinpath(file_name))
+        file_name = f"model_optim_v{model_version}_step-{global_step}_epoch-{epoch}.pth"
+        torch.save(
+            {
+                "model_state_dict": model.state_dict(),
+                "optim_state_dict": optimizer.state_dict(),
+            },
+            model_save_dir.joinpath(file_name),
+        )
 
     else:
         return train_loss_per_epoch, val_loss_per_epoch, track_tokens_seen
@@ -205,7 +223,7 @@ if __name__ == "__main__":
     argparser = ArgumentParser(description="Custom GPT2 model training configuration")
 
     argparser.add_argument(
-        "--data-dir", type=str, help="path to the training data", required=True
+        "--data_dir", type=str, help="path to the training data", required=True
     )
 
     argparser.add_argument(
@@ -223,7 +241,11 @@ if __name__ == "__main__":
     # --------------------------#
     # ----PATH TO TEXT FILES----#
     # Get the list of paths of all the data files
-    data_dir = "."
+    # data_dir = "../../Dataloader/training_data"
+    data_dir = args.data_dir
+
+    if not Path(data_dir).exists():
+        raise NotADirectoryError("Data directory does not exist.")
     all_files = [
         os.path.join(path, name)
         for path, subdirs, files in os.walk(data_dir)
@@ -286,5 +308,4 @@ if __name__ == "__main__":
     )
 
 # TODO
-# 1. Need to check how to save optimizer state too along with model state
 # 2. Need to check how to save artifacts such as llm and training config without using mlflow
