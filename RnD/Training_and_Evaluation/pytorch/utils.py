@@ -107,14 +107,15 @@ def calculate_perplexity(
     assert num_batches >= 1, "Dataloader must contain at least 1 batch"
 
     model.eval()
-    for input_batch, target_batch in dataloader:
-        input_batch = input_batch.to(compute_device)
-        target_batch = target_batch.to(compute_device)
+    with torch.no_grad():
+        for input_batch, target_batch in dataloader:
+            input_batch = input_batch.to(compute_device)
+            target_batch = target_batch.to(compute_device)
 
-        preds = model(input_batch)
+            preds = model(input_batch)
 
-        perplexity_value = perpl_func(preds, target_batch)
-        avg_perplexity += perplexity_value
+            perplexity_value = perpl_func(preds, target_batch)
+            avg_perplexity += perplexity_value
 
     model.train()
 
