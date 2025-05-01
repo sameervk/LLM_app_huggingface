@@ -9,4 +9,6 @@ optimizer:
     learning_rate: 0.0004
     weight_decay: 0.1
 
-epochs: 10
+epochs: 2
+
+start_epoch: 1
