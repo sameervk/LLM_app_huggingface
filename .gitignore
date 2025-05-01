@@ -5,6 +5,9 @@ __pycache__/
 
 .idea
 
+# saved models
+/RnD/Training_and_Evaluation/project_gutenberg/saved_models
+
 # secrets
 /api/access_tokens.env
 
